@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting RSVP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #FFC107 0%, #FFA000 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2d3748;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #718096;
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #FFC107;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option {
+            flex: 1;
+            min-width: 140px;
+        }
+        
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+        
+        .radio-option label {
+            display: block;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .radio-option input[type="radio"]:checked + label {
+            border-color: #FFC107;
+            background: #000000;
+            color: #FFC107;
+        }
+        
+        .radio-option label:hover {
+            border-color: #FFC107;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: #000000;
+            color: #FFC107;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 193, 7, 0.4);
+            background: #FFC107;
+            color: #000000;
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .success-message h2 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .success-message p {
+            color: #718096;
+        }
+        
+        .required {
+            color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Meeting RSVP</h1>
+            <p>Please confirm your attendance</p>
+        </div>
+        
+        <form id="rsvpForm">
+            <div class="form-group">
+                <label for="name">Full Name <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required placeholder="Enter your name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Work Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required placeholder="your.email@maybank.com">
+            </div>
+            
+            <div class="form-group">
+                <label>Will you attend? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="yes" name="attendance" value="yes" required>
+                        <label for="yes">✓ Yes</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="no" name="attendance" value="no">
+                        <label for="no">✗ No</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="maybe" name="attendance" value="maybe">
+                        <label for="maybe">? Maybe</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="comments">Additional Comments (Optional)</label>
+                <textarea id="comments" name="comments" placeholder="Any dietary restrictions, questions, or notes..."></textarea>
+            </div>
+            
+            <button type="submit" class="submit-btn">Submit Response</button>
+        </form>
+        
+        <div class="success-message" id="successMessage">
+            <div class="success-icon">✓</div>
+            <h2>Thank You!</h2>
+            <p>Your response has been recorded.</p>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('rsvpForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                attendance: document.querySelector('input[name="attendance"]:checked').value,
+                comments: document.getElementById('comments').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Get existing responses
+            let responses = JSON.parse(localStorage.getItem('meetingResponses') || '[]');
+            
+            // Find and remove any existing response with same name AND email
+            responses = responses.filter(r => 
+                !(r.name.toLowerCase() === formData.name.toLowerCase() && 
+                  r.email.toLowerCase() === formData.email.toLowerCase())
+            );
+            
+            // Add new response
+            responses.push(formData);
+            localStorage.setItem('meetingResponses', JSON.stringify(responses));
+            
+            // Show success message
+            document.getElementById('rsvpForm').style.display = 'none';
+            document.getElementById('successMessage').classList.add('show');
+            
+            // Optional: Send to a backend endpoint
+            // await fetch('YOUR_BACKEND_URL', {
+            //     method: 'POST',
+            //     headers: {'Content-Type': 'application/json'},
+            //     body: JSON.stringify(formData)
+            // });
+        });
+    </script>
+</body>
+</html>

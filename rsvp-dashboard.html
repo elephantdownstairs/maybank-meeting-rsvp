@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Responses Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f7f7f7;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            border-bottom: 3px solid #FFC107;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #000000;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-card.yes {
+            background: #FFF9C4;
+            border: 2px solid #FFC107;
+        }
+        
+        .stat-card.no {
+            background: #F5F5F5;
+            border: 2px solid #424242;
+        }
+        
+        .stat-card.maybe {
+            background: #FFECB3;
+            border: 2px solid #FFA000;
+        }
+        
+        .stat-card.total {
+            background: #000000;
+            border: 2px solid #FFC107;
+        }
+        
+        .stat-card.total .stat-number,
+        .stat-card.total .stat-label {
+            color: #FFC107;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000000;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #424242;
+            margin-top: 5px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #FFC107;
+            color: #000000;
+        }
+        
+        .btn-primary:hover {
+            background: #FFA000;
+        }
+        
+        .btn-secondary {
+            background: #000000;
+            color: #FFC107;
+            border: 2px solid #FFC107;
+        }
+        
+        .btn-secondary:hover {
+            background: #212121;
+        }
+        
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #000000;
+            color: #FFC107;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #FFC107;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        tr:hover {
+            background: #f7fafc;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge.yes {
+            background: #FFF9C4;
+            color: #000000;
+            border: 1px solid #FFC107;
+        }
+        
+        .badge.no {
+            background: #424242;
+            color: #FFFFFF;
+        }
+        
+        .badge.maybe {
+            background: #FFECB3;
+            color: #000000;
+            border: 1px solid #FFA000;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+        
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 RSVP Responses Dashboard</h1>
+            <p style="color: #718096;">Track and manage meeting responses</p>
+        </div>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card total">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Total Responses</div>
+            </div>
+            <div class="stat-card yes">
+                <div class="stat-number" id="yesCount">0</div>
+                <div class="stat-label">Attending</div>
+            </div>
+            <div class="stat-card no">
+                <div class="stat-number" id="noCount">0</div>
+                <div class="stat-label">Not Attending</div>
+            </div>
+            <div class="stat-card maybe">
+                <div class="stat-number" id="maybeCount">0</div>
+                <div class="stat-label">Maybe</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-primary" onclick="refreshData()">🔄 Refresh</button>
+            <button class="btn btn-secondary" onclick="exportToCSV()">📥 Export CSV</button>
+            <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All</button>
+        </div>
+        
+        <div id="tableContainer">
+            <table id="responsesTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Work Email</th>
+                        <th>Response</th>
+                        <th>Comments</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+            
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-state-icon">📭</div>
+                <h3>No responses yet</h3>
+                <p>Responses will appear here once people start submitting the form.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function loadData() {
+            const responses = JSON.parse(localStorage.getItem('meetingResponses') || '[]');
+            
+            if (responses.length === 0) {
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('responsesTable').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('responsesTable').style.display = 'table';
+            
+            // Calculate stats
+            const yesCount = responses.filter(r => r.attendance === 'yes').length;
+            const noCount = responses.filter(r => r.attendance === 'no').length;
+            const maybeCount = responses.filter(r => r.attendance === 'maybe').length;
+            
+            document.getElementById('totalCount').textContent = responses.length;
+            document.getElementById('yesCount').textContent = yesCount;
+            document.getElementById('noCount').textContent = noCount;
+            document.getElementById('maybeCount').textContent = maybeCount;
+            
+            // Populate table
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            responses.reverse().forEach(response => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td><strong>${response.name}</strong></td>
+                    <td>${response.email}</td>
+                    <td><span class="badge ${response.attendance}">${response.attendance.toUpperCase()}</span></td>
+                    <td>${response.comments || '-'}</td>
+                    <td>${new Date(response.timestamp).toLocaleString()}</td>
+                `;
+            });
+        }
+        
+        function refreshData() {
+            loadData();
+        }
+        
+        function exportToCSV() {
+            const responses = JSON.parse(localStorage.getItem('meetingResponses') || '[]');
+            
+            if (responses.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            const headers = ['Name', 'Email', 'Attendance', 'Comments', 'Timestamp'];
+            const csvContent = [
+                headers.join(','),
+                ...responses.map(r => [
+                    `"${r.name}"`,
+                    `"${r.email}"`,
+                    r.attendance,
+                    `"${r.comments || ''}"`,
+                    `"${new Date(r.timestamp).toLocaleString()}"`
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `rsvp-responses-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all responses? This cannot be undone.')) {
+                localStorage.removeItem('meetingResponses');
+                loadData();
+            }
+        }
+        
+        // Load data on page load
+        loadData();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
+    </script>
+</body>
+</html>
