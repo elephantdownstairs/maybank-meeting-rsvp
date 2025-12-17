@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RSVP Responses Dashboard</title>
+    <title>MAMG Growth and Income-I Fund Launch - RSVP Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -198,8 +198,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>📊 RSVP Responses Dashboard</h1>
-            <p style="color: #718096;">Track and manage meeting responses</p>
+            <h1>📊 MAMG Growth and Income-I Fund Launch - RSVP Dashboard</h1>
+            <p style="color: #718096;">Track and manage event responses</p>
         </div>
         
         <div class="stats" id="stats">
@@ -214,10 +214,6 @@
             <div class="stat-card no">
                 <div class="stat-number" id="noCount">0</div>
                 <div class="stat-label">Not Attending</div>
-            </div>
-            <div class="stat-card maybe">
-                <div class="stat-number" id="maybeCount">0</div>
-                <div class="stat-label">Maybe</div>
             </div>
         </div>
         
@@ -266,12 +262,10 @@
             // Calculate stats
             const yesCount = responses.filter(r => r.attendance === 'yes').length;
             const noCount = responses.filter(r => r.attendance === 'no').length;
-            const maybeCount = responses.filter(r => r.attendance === 'maybe').length;
             
             document.getElementById('totalCount').textContent = responses.length;
             document.getElementById('yesCount').textContent = yesCount;
             document.getElementById('noCount').textContent = noCount;
-            document.getElementById('maybeCount').textContent = maybeCount;
             
             // Populate table
             const tbody = document.getElementById('tableBody');
